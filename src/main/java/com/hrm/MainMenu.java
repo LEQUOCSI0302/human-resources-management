@@ -1,5 +1,6 @@
 package com.hrm;
 
+import com.hrm.auth.pattern.SessionManager;
 import com.hrm.console.*;
 import com.hrm.profile.model.EmployeeProfile;
 import com.hrm.training.observer.HrNotificationObserver;
@@ -21,6 +22,7 @@ public class MainMenu {
         private DisciplineMenu disciplineMenu;
         private BudgetMenu budgetMenu;
         private ReportMenu reportMenu;
+        private SessionManager session;
 
         private Scanner scanner;
 
@@ -33,7 +35,7 @@ public class MainMenu {
                 TrainingMenu trainingMenu,
                 DisciplineMenu disciplineMenu,
                 BudgetMenu budgetMenu,
-                ReportMenu reportMenu) {
+                ReportMenu reportMenu, SessionManager session) {
 
             this.loginMenu = loginMenu;
             this.profileMenu = profileMenu;
@@ -45,6 +47,7 @@ public class MainMenu {
             this.budgetMenu = budgetMenu;
             this.reportMenu = reportMenu;
             this.scanner = new Scanner(System.in);
+            this.session = session;
         }
 
         // 3. Phương thức hiển thị và điều hướng Menu chính
@@ -55,7 +58,7 @@ public class MainMenu {
                 System.out.println("   HỆ THỐNG QUẢN LÝ NHÂN SỰ TOÀN DIỆN HRM ");
                 System.out.println("=========================================");
                 System.out.println("1. Phân hệ: Đăng nhập & Tài khoản (Login)");
-                System.out.println("2. Phân hệ: Quản lý Hồ sơ Nhân viên (Profile)");
+                System.out.println("2. Phân hệ: Quản lý Nhân viên (Profile)");
                 System.out.println("3. Phân hệ: Quản lý Tuyển dụng (Recruitment)");
                 System.out.println("4. Phân hệ: Quản lý Chấm công (Attendance)");
                 System.out.println("5. Phân hệ: Quản lý Lương (Payroll)");
@@ -70,14 +73,21 @@ public class MainMenu {
                     choice = Integer.parseInt(scanner.nextLine());
                     switch (choice) {
                         case 1: loginMenu.displayMenu(); break;
-                        case 2: profileMenu.displayMenu(); break;
-                        case 3: recruitmentMenu.displayMenu(); break;
-                        case 4: attendanceMenu.displayMenu(); break;
-                        case 5: payrollMenu.displayMenu(); break;
+                        case 2:
+                            if(!session.isLoggedIn()){
+                                System.out.println("Bạn chưa đăng nhập!");
+                                break;
+                            }
+                            profileMenu.displayMenu();
+                            break;
+                        //case 3: recruitmentMenu.displayMenu(); break;
+                        //case 4: attendanceMenu.displayMenu(); break;
+                        //case 5: payrollMenu.displayMenu(); break;
                         case 6: trainingMenu.displayMenu(); break;
-                        case 7: disciplineMenu.displayMenu(); break;
-                        case 8: budgetMenu.displayMenu(); break;
+                        //case 7: disciplineMenu.displayMenu(); break;
+                        //case 8: budgetMenu.displayMenu(); break;
                         case 9: reportMenu.displayMenu(); break;
+                        case 10: reportMenu.displayMenu(); break;
                         case 0:
                             System.out.println("Đang thoát hệ thống... Tạm biệt!");
                             break;
