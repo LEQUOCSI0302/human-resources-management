@@ -3,6 +3,7 @@ package com.hrm.recruitment.service;
 import com.hrm.profile.factory.EmployeeFactory;
 import com.hrm.recruitment.model.Candidate;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class RecruitmentService {
