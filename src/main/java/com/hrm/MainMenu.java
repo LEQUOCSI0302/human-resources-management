@@ -78,7 +78,17 @@ public class MainMenu {
                         //case 3: recruitmentMenu.displayMenu(); break;
                         //case 4: attendanceMenu.displayMenu(); break;
                         //case 5: payrollMenu.displayMenu(); break;
-                        case 6: trainingMenu.displayMenu(); break;
+                        case 6: if (!session.isLoggedIn()) {
+                            System.out.println("Bạn chưa đăng nhập!");
+                            break;
+                        }
+                            String roleName = session.getCurrentAccount().getRole().getRoleName();
+                            if (!isTrainingRoleAllowed(roleName)) {
+                                System.out.println("Bạn không có quyền truy cập phân hệ Đào tạo & KPI! (Chỉ ADMIN/HR/MANAGER)");
+                                break;
+                            }
+                            trainingMenu.displayMenu();
+                            break;
                         //case 7: disciplineMenu.displayMenu(); break;
                         //case 8: budgetMenu.displayMenu(); break;
                         case 9: reportMenu.displayMenu(); break;
@@ -95,5 +105,13 @@ public class MainMenu {
                 }
             } while (choice != 0);
         }
+    // Kiểm tra role có được phép vào phân hệ Đào tạo & KPI hay không.
+    // Chỉ ADMIN, HR, MANAGER được truy cập; các role khác (VD: EMPLOYEE) bị chặn.
+    private boolean isTrainingRoleAllowed(String roleName) {
+        if (roleName == null) return false;
+        return roleName.equalsIgnoreCase("ADMIN")
+                || roleName.equalsIgnoreCase("HR")
+                || roleName.equalsIgnoreCase("MANAGER");
+    }
 
 }
