@@ -57,8 +57,11 @@ public class Test {
         trainingService.updateKPI(emp4, "06/2026", 6.5);
         TrainingMenu trainingMenu = new TrainingMenu(trainingService, employees, sharedScanner);
 
+        AttendanceMenu attendanceMenu = new AttendanceMenu(employees);
+        PayrollMenu payrollMenu = new PayrollMenu(employees);
 
-        MainMenu mainMenu = new MainMenu(loginMenu, new ProfileMenu(employees,sharedScanner), null, null, null, trainingMenu, null, null, null, session);
+
+        MainMenu mainMenu = new MainMenu(loginMenu, new ProfileMenu(employees,sharedScanner), null, attendanceMenu, payrollMenu, trainingMenu, null, null, null, session);
         mainMenu.displayMenu();
 
 

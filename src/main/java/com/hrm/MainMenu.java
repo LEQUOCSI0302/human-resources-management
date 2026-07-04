@@ -76,8 +76,8 @@ public class MainMenu {
                             profileMenu.displayMenu();
                             break;
                         //case 3: recruitmentMenu.displayMenu(); break;
-                        //case 4: attendanceMenu.displayMenu(); break;
-                        //case 5: payrollMenu.displayMenu(); break;
+                        case 4: attendanceMenu.displayMenu(); break;
+                        case 5: payrollMenu.displayMenu(); break;
                         case 6: if (!session.isLoggedIn()) {
                             System.out.println("Bạn chưa đăng nhập!");
                             break;
