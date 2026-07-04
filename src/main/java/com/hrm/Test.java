@@ -40,7 +40,7 @@ public class Test {
         accounts.add(new Account("manager01", "123456", managerRole));
         Role employeeRole = new Role("EMPLOYEE");
         accounts.add(new Account("nv01", "123456", employeeRole));
-        LoginMenu loginMenu = new LoginMenu(accounts, session, sharedScanner)
+        LoginMenu loginMenu = new LoginMenu(accounts, session, sharedScanner);
 
         TrainingService trainingService = new TrainingService();
         trainingService.attach(new HrNotificationObserver());
