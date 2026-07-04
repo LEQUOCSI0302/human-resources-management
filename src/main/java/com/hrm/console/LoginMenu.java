@@ -11,7 +11,7 @@ public class LoginMenu {
     private SessionManager session;
     private Scanner scanner;
 
-    public LoginMenu(List<Account> accounts, SessionManager session) {
+    public LoginMenu(List<Account> accounts, SessionManager session,Scanner scanner) {
         this.accounts = accounts;
         this.session = session;
         this.scanner = new Scanner(System.in);

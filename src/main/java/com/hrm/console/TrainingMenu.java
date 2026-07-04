@@ -5,7 +5,7 @@ import com.hrm.training.model.Course;
 import com.hrm.training.model.Enrollment;
 import com.hrm.training.model.KPI;
 import com.hrm.training.model.TrainingPlan;
-import com.hrm.training.observer.TrainingService;
+import com.hrm.training.service.TrainingService;
 
 import java.util.List;
 import java.util.Scanner;
@@ -16,7 +16,7 @@ public class TrainingMenu {
     private Scanner scanner;
 
     // Constructor đúng theo sơ đồ lớp
-    public TrainingMenu(TrainingService service, List<EmployeeProfile> employees) {
+    public TrainingMenu(TrainingService service, List<EmployeeProfile> employees,Scanner scanner) {
         this.trainingService = service;
         this.employees = employees;
         this.scanner = new Scanner(System.in);

@@ -1,8 +1,9 @@
-package com.hrm.training.observer;
+package com.hrm.training.service;
 
 import com.hrm.profile.model.EmployeeProfile;
 import com.hrm.training.model.KPI;
 import com.hrm.training.model.TrainingPlan;
+import com.hrm.training.observer.KpiObserver;
 
 import java.util.ArrayList;
 import java.util.List;

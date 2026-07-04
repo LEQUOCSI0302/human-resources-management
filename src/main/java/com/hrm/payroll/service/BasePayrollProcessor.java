@@ -6,7 +6,7 @@ import com.hrm.payroll.model.PaySlip;
 import com.hrm.payroll.model.SalaryComponent;
 import com.hrm.profile.model.Contract;
 import com.hrm.profile.model.EmployeeProfile;
-import com.hrm.training.observer.TrainingService;
+import com.hrm.training.service.TrainingService;
 
 public abstract class BasePayrollProcessor {
     protected TrainingService trainingService;
