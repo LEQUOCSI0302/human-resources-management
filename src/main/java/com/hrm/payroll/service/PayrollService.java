@@ -1,94 +1,120 @@
 package com.hrm.payroll.service;
 
-import com.hrm.attendance.service.AttendanceService;
-import com.hrm.budget.service.BudgetManager;
-import com.hrm.discipline.service.DisciplineService;
-import com.hrm.payroll.model.PaySlip;
+import com.hrm.payroll.model.AttendanceSummary;
+import com.hrm.payroll.model.Payroll;
+import com.hrm.payroll.model.PayrollDetail;
+import com.hrm.payroll.repository.PayrollRepository;
 import com.hrm.profile.model.EmployeeProfile;
-import com.hrm.training.observer.TrainingService;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class PayrollService extends BasePayrollProcessor implements IPayrollService{
-    // Thuộc tính quản lý ngân sách được cấu hình riêng cho PayrollService
-    private BudgetManager budgetManager;
+public class PayrollService {
+    // Database
+    private PayrollRepository repo;
 
-    // Constructor nhận các service phụ thuộc từ lớp cha và gán budgetManager
-    public PayrollService(TrainingService ts, DisciplineService ds, AttendanceService as, BudgetManager bm) {
-        super(ts, ds, as); // Gọi constructor của BasePayrollProcessor
-        this.budgetManager = bm;
+    // Lưu bảng lương đang tính (chưa lưu DB)
+    private List<PayrollDetail> draftPayroll = new ArrayList<>();
+    public PayrollService(PayrollRepository repo) {
+        this.repo = repo;
     }
 
-    /**
-     * Hoàn thiện phương thức Duyệt và Chi Lương cho Phòng Ban
-     */
-    @Override
-    public void approveAndPayroll(List<PaySlip> slips, String dept) {
-        if (slips == null || slips.isEmpty()) {
-            System.out.println("Không có danh sách phiếu lương để duyệt.");
+
+     // 5.1.0 -> 5.1.4 TÍNH LƯƠNG (Chỉ tính và xem trước)
+    public List<PayrollDetail> calculatePayroll(List<EmployeeProfile> employees, String month) {
+        draftPayroll.clear();
+
+
+         // 5.1.2 Validation
+        if (employees == null || employees.isEmpty()) {
+            System.out.println("Không có nhân viên để tính lương.");
+            return draftPayroll;
+        }
+
+
+         //loop từng nhân viên
+        for (EmployeeProfile emp : employees) {
+            // ==Employee
+            // Demo lương cơ bản
+            double basicSalary = 10000000;
+
+            // Demo phụ cấp
+            double allowance = 1000000;
+
+
+            // == AttendanceSummary
+            // Demo số ngày công
+            AttendanceSummary attendance = new AttendanceSummary(emp.getId(), 26);
+            int workingDays = attendance.getWorkingDays();
+
+            // 5.1.3 Tính lương
+            double salaryByDay = basicSalary / 26;
+            double grossSalary = salaryByDay * workingDays;
+            double insurance = grossSalary * 0.08;
+            double tax = grossSalary * 0.05;
+            double netSalary = grossSalary + allowance - insurance - tax;
+
+            // tạo new PayrollDetail
+            PayrollDetail detail = new PayrollDetail(emp.getId(), emp.getName(), basicSalary, workingDays, allowance, insurance, tax, netSalary);
+            draftPayroll.add(detail);
+
+        }
+
+//        5.1.4
+        System.out.println("--------------------------------------");
+        System.out.println("Tính lương hoàn tất.");
+        System.out.println("Tổng nhân viên: " + draftPayroll.size());
+
+        return draftPayroll;
+    }
+
+
+     // 5.1.5 Xem bảng lương tạm
+    public void previewPayroll() {
+        if (draftPayroll.isEmpty()) {
+            System.out.println("Chưa có bảng lương.");
             return;
         }
 
-        double totalPayrollAmount = 0.0;
-        String payrollMonth = "";
-
-        // 1. Lọc và tính tổng tiền lương thực nhận (Net Salary) của phòng ban chỉ định
-        for (PaySlip slip : slips) {
-            if (slip.getEmployee() != null && slip.getEmployee().getDepartment().equalsIgnoreCase(dept)) {
-                // Đảm bảo phiếu lương đã được tính toán lương ròng chính xác
-                totalPayrollAmount += slip.calculateNetSalary();
-
-                // Lấy thông tin tháng từ phiếu lương hợp lệ đầu tiên để lưu vết lịch sử ngân sách
-                if (payrollMonth.isEmpty() && slip.getMonth() != null) {
-                    payrollMonth = slip.getMonth();
-                }
-            }
+        for (PayrollDetail detail : draftPayroll) {
+            System.out.println(detail);
+            System.out.println("--------------------------------");
         }
 
-        // 2. Thực hiện trừ quỹ ngân sách nếu tổng số tiền chi lương lớn hơn 0
-        if (totalPayrollAmount > 0) {
-            String transactionDesc = "Chi trả lương cho phòng ban: " + dept
-                    + (payrollMonth.isEmpty() ? "" : " - Tháng: " + payrollMonth);
-            try {
-                // Gọi BudgetManager thực hiện trừ tiền quỹ của phòng ban tương ứng
-                budgetManager.deductBudget(dept, totalPayrollAmount, transactionDesc);
-
-                System.out.println("[PayrollService] Đã phê duyệt thành công bảng lương phòng ban: " + dept);
-                System.out.println("Tổng số tiền đã khấu trừ từ ngân sách phòng ban: " + totalPayrollAmount);
-            } catch (Exception e) {
-                System.err.println("Lỗi hệ thống khi khấu trừ ngân sách phòng ban: " + e.getMessage());
-            }
-        } else {
-            System.out.println("Không tìm thấy phiếu lương nào thuộc phòng ban '" + dept + "' để thực hiện chi trả.");
-        }
     }
 
-    /**
-     * Override hàm tính thưởng KPI từ lớp trừu tượng BasePayrollProcessor
-     */
-    @Override
-    protected double calculateBonus(EmployeeProfile emp, String month) {
-        // Lấy điểm KPI của nhân viên từ TrainingService
-        double kpiScore = trainingService.getKpiScore(emp, month);
 
-        // Logic thưởng mẫu: KPI >= 9.0 thưởng 2,000,000; KPI >= 7.0 thưởng 1,000,000
-        if (kpiScore >= 9.0) {
-            return 2000000.0;
-        } else if (kpiScore >= 7.0) {
-            return 1000000.0;
+     // 5.1.5 -> 5.1.6 Lưu bảng lương
+    public void savePayroll(String payrollId, String month) {
+        if (draftPayroll.isEmpty()) {
+            System.out.println("Chưa tính lương.");
+            return;
         }
-        return 0.0;
+        Payroll payroll = new Payroll(payrollId, month);
+
+    //gắn PayrollDetail
+        for (PayrollDetail detail : draftPayroll) {
+            payroll.addDetail(detail);
+
+        }
+
+
+    //insert db
+        repo.save(payroll);
+        System.out.println("Lưu bảng lương thành công.");
+
     }
 
-    /**
-     * Override hàm tính thuế thu nhập từ lớp trừu tượng BasePayrollProcessor
-     */
-    @Override
-    protected double deductTaxes(double totalIncomeBeforeTax) {
-        // Logic tính thuế mẫu đơn giản: Khấu trừ 10% cho phần thu nhập vượt quá 11,000,000
-        if (totalIncomeBeforeTax > 11000000.0) {
-            return (totalIncomeBeforeTax - 11000000.0) * 0.1;
+//xem all bảng lương
+    public void showAllPayroll() {
+        List<Payroll> list = repo.findAll();
+        if (list.isEmpty()) {
+            System.out.println("Chưa có bảng lương.");
+            return;
         }
-        return 0.0;
+        for (Payroll payroll : list) {
+            System.out.println(payroll);
+            System.out.println("==============================");
+        }
     }
 }

@@ -81,8 +81,8 @@ public class MainMenu {
                             profileMenu.displayMenu();
                             break;
                         //case 3: recruitmentMenu.displayMenu(); break;
-                        //case 4: attendanceMenu.displayMenu(); break;
-                        //case 5: payrollMenu.displayMenu(); break;
+                        case 4: attendanceMenu.displayMenu(); break;
+                        case 5: payrollMenu.displayMenu(); break;
                         case 6: trainingMenu.displayMenu(); break;
                         //case 7: disciplineMenu.displayMenu(); break;
                         //case 8: budgetMenu.displayMenu(); break;

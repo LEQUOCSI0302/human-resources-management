@@ -25,7 +25,9 @@ public class Test {
         Role admin = new Role("ADMIN");
         accounts.add(new Account("admin","123456", admin));
         LoginMenu loginMenu = new LoginMenu(accounts, session);
-        MainMenu mainMenu = new MainMenu(loginMenu, new ProfileMenu(employees), null, null, null, null, null, null, null, session);
+        AttendanceMenu attendanceMenu = new AttendanceMenu(employees);
+        PayrollMenu payrollMenu = new PayrollMenu(employees);
+        MainMenu mainMenu = new MainMenu(loginMenu, new ProfileMenu(employees), null, attendanceMenu, payrollMenu, null, null, null, null, session);
         mainMenu.displayMenu();
     }
 }
