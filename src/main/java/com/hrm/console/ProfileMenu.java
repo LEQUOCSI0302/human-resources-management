@@ -12,7 +12,7 @@ public class ProfileMenu {
     private List<EmployeeProfile> employees;
     private Scanner scanner;
 
-    public ProfileMenu(List<EmployeeProfile> employees) {
+    public ProfileMenu(List<EmployeeProfile> employees, Scanner scanner) {
         this.employees = employees;
         this.scanner = new Scanner(System.in);
     }

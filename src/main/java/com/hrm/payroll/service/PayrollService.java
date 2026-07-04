@@ -5,7 +5,7 @@ import com.hrm.budget.service.BudgetManager;
 import com.hrm.discipline.service.DisciplineService;
 import com.hrm.payroll.model.PaySlip;
 import com.hrm.profile.model.EmployeeProfile;
-import com.hrm.training.observer.TrainingService;
+import com.hrm.training.service.TrainingService;
 
 import java.util.List;
 

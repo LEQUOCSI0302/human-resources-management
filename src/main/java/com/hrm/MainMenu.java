@@ -2,12 +2,7 @@ package com.hrm;
 
 import com.hrm.auth.pattern.SessionManager;
 import com.hrm.console.*;
-import com.hrm.profile.model.EmployeeProfile;
-import com.hrm.training.observer.HrNotificationObserver;
-import com.hrm.training.observer.TrainingService;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
