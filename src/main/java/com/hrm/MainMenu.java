@@ -17,20 +17,24 @@ public class MainMenu {
         private DisciplineMenu disciplineMenu;
         private BudgetMenu budgetMenu;
         private ReportMenu reportMenu;
+        private PhanQuyenMenu phanquyenMenu;
         private SessionManager session;
 
         private Scanner scanner;
 
-        // 2. Constructor nhận đầy đủ 9 tham số Menu con đúng theo sơ đồ lớp
+        // 2. Constructor nhận đầy đủ 10 tham số Menu con đúng theo sơ đồ lớp
+        // (bổ sung PhanQuyenMenu cho phân hệ Phân quyền người dùng - Authorization)
     public MainMenu(LoginMenu loginMenu,
-                ProfileMenu profileMenu,
-                RecruitmentMenu recruitmentMenu,
-                AttendanceMenu attendanceMenu,
-                PayrollMenu payrollMenu,
-                TrainingMenu trainingMenu,
-                DisciplineMenu disciplineMenu,
-                BudgetMenu budgetMenu,
-                ReportMenu reportMenu, SessionManager session) {
+                    ProfileMenu profileMenu,
+                    RecruitmentMenu recruitmentMenu,
+                    AttendanceMenu attendanceMenu,
+                    PayrollMenu payrollMenu,
+                    TrainingMenu trainingMenu,
+                    DisciplineMenu disciplineMenu,
+                    BudgetMenu budgetMenu,
+                    ReportMenu reportMenu,
+                    PhanQuyenMenu phanquyenMenu,
+                    SessionManager session) {
 
             this.loginMenu = loginMenu;
             this.profileMenu = profileMenu;
@@ -41,6 +45,7 @@ public class MainMenu {
             this.disciplineMenu = disciplineMenu;
             this.budgetMenu = budgetMenu;
             this.reportMenu = reportMenu;
+            this.phanquyenMenu = phanquyenMenu;
             this.scanner = new Scanner(System.in);
             this.session = session;
         }
@@ -61,8 +66,9 @@ public class MainMenu {
                 System.out.println("7. Phân hệ: Quản lý Kỷ luật (Discipline)");
                 System.out.println("8. Phân hệ: Quản lý Ngân sách (Budget)");
                 System.out.println("9. Phân hệ: Báo cáo & Thống kê (Report)");
+                System.out.println("10. Phân hệ: Phân quyền người dùng (Authorization)");
                 System.out.println("0. Thoát chương trình");
-                System.out.print("Chọn phân hệ chức năng (0-9): ");
+                System.out.print("Chọn phân hệ chức năng (0-10): ");
 
                 try {
                     choice = Integer.parseInt(scanner.nextLine());
@@ -92,15 +98,15 @@ public class MainMenu {
                         //case 7: disciplineMenu.displayMenu(); break;
                         //case 8: budgetMenu.displayMenu(); break;
                         case 9: reportMenu.displayMenu(); break;
-                        case 10: reportMenu.displayMenu(); break;
+                        case 10: phanquyenMenu.displayMenu(); break;
                         case 0:
                             System.out.println("Đang thoát hệ thống... Tạm biệt!");
                             break;
                         default:
-                            System.out.println("Lựa chọn không hợp lệ! Vui lòng chọn từ 0 đến 9.");
+                            System.out.println("Lựa chọn không hợp lệ! Vui lòng chọn từ 0 đến 10.");
                     }
                 } catch (NumberFormatException e) {
-                    System.out.println("Lỗi: Vui lòng chỉ nhập số từ 0 đến 9!");
+                    System.out.println("Lỗi: Vui lòng chỉ nhập số từ 0 đến 10!");
                     choice = -1; // Kích hoạt lặp lại menu
                 }
             } while (choice != 0);
