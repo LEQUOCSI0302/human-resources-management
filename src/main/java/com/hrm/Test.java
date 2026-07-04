@@ -6,6 +6,7 @@ import com.hrm.auth.pattern.SessionManager;
 import com.hrm.console.*;
 import com.hrm.profile.model.EmployeeProfile;
 import com.hrm.profile.model.FullTimeEmployee;
+import com.hrm.profile.model.PartTimeEmployee;
 import com.hrm.training.model.TrainingPlan;
 import com.hrm.training.observer.HrNotificationObserver;
 import com.hrm.training.service.TrainingService;
@@ -24,12 +25,22 @@ public class Test {
         employees.add(emp1);
         FullTimeEmployee emp2 = new FullTimeEmployee("NV002","Trần Văn B","HR","Manager","BH002");
         employees.add(emp2);
+        FullTimeEmployee emp3 = new FullTimeEmployee("NV003","Lê Thị C","IT","Tester","BH003");
+        employees.add(emp3);
+        PartTimeEmployee emp4 = new PartTimeEmployee("NV004","Phạm Văn D","Sales","Nhân viên bán hàng", 50000);
+        employees.add(emp4);
 
         SessionManager session = SessionManager.getInstance();
         List<Account> accounts = new ArrayList<>();
         Role admin = new Role("ADMIN");
         accounts.add(new Account("admin","123456", admin));
-        LoginMenu loginMenu = new LoginMenu(accounts, session,sharedScanner);
+        Role hrRole = new Role("HR");
+        accounts.add(new Account("hr01", "123456", hrRole));
+        Role managerRole = new Role("MANAGER");
+        accounts.add(new Account("manager01", "123456", managerRole));
+        Role employeeRole = new Role("EMPLOYEE");
+        accounts.add(new Account("nv01", "123456", employeeRole));
+        LoginMenu loginMenu = new LoginMenu(accounts, session, sharedScanner)
 
         TrainingService trainingService = new TrainingService();
         trainingService.attach(new HrNotificationObserver());
@@ -42,6 +53,8 @@ public class Test {
         trainingService.updateKPI(emp1, "06/2026", 8.5);
         trainingService.updateKPI(emp2, "05/2026", 9.0);
         trainingService.updateKPI(emp2, "06/2026", 8.8);
+        trainingService.updateKPI(emp3, "06/2026", 7.5);
+        trainingService.updateKPI(emp4, "06/2026", 6.5);
         TrainingMenu trainingMenu = new TrainingMenu(trainingService, employees, sharedScanner);
 
 
